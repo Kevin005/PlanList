@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="7dip">
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:paddingTop="15dip">
 
     <CheckBox
         android:id="@+id/cBox_is_doing"
@@ -14,7 +16,8 @@
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="abcdef"
+        android:layout_marginLeft="5dip"
+        android:text=""
         android:textSize="14sp" />
 
 </LinearLayout>
