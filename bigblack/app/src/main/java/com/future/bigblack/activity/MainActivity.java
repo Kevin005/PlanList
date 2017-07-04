@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.future.bigblack.R;
@@ -26,6 +29,9 @@ import java.util.List;
 import static com.future.bigblack.untils.DateUntil.dateToStamp;
 
 public class MainActivity extends AppCompatActivity {
+    private LinearLayout line_input_content;
+    private EditText edt_input_content;
+    private RadioButton rBtn_input_level;
     private ListView lv_content;
     private MyPlanAdapter adapter;
 
@@ -42,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
                 popDialog();
             }
         });
+        line_input_content = (LinearLayout) findViewById(R.id.line_input_content);
+        edt_input_content = (EditText) findViewById(R.id.edt_input_content);
+        rBtn_input_level = (RadioButton) findViewById(R.id.rBtn_input_level);
         lv_content = (ListView) findViewById(R.id.lv_content);
         adapter = new MyPlanAdapter(MainActivity.this);
         lv_content.setAdapter(adapter);
