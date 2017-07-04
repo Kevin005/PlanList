@@ -7,10 +7,30 @@ package com.future.bigblack.bean;
 public class PlanInfo {
     private int id;
     private String content;
+    /** 1:ing 0:ed */
     private int is_doing;
     /** 1:普通 2:重要 */
     private int level;
-    private long date;
+    /** 12345678900 */
+    private long dateStamp;
+    /** 2017-01-01 */
+    private String dateDay;
+
+    public long getDateStamp() {
+        return dateStamp;
+    }
+
+    public void setDateStamp(long dateStamp) {
+        this.dateStamp = dateStamp;
+    }
+
+    public String getDateDay() {
+        return dateDay;
+    }
+
+    public void setDateDay(String dateDay) {
+        this.dateDay = dateDay;
+    }
 
     public int getId() {
         return id;
@@ -44,11 +64,4 @@ public class PlanInfo {
         this.level = level;
     }
 
-    public long getDate() {
-        return date;
-    }
-
-    public void setDate(long date) {
-        this.date = date;
-    }
 }

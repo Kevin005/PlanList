@@ -19,8 +19,11 @@ import com.future.bigblack.R;
 import com.future.bigblack.adapter.MyPlanAdapter;
 import com.future.bigblack.bean.PlanInfo;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.future.bigblack.untils.DateUntil.dateToStamp;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lv_content;
@@ -121,7 +124,14 @@ public class MainActivity extends AppCompatActivity {
         cal_view.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Log.e("abc", year + "====" + month + "====" + dayOfMonth);
+                String selectDateStr = year + "-" + month + "-" + dayOfMonth + " 00:00:00";
+                Log.e("abc", selectDateStr);
+                try {
+                    String selectStampStr = dateToStamp(selectDateStr);
+                    Log.e("abc", selectStampStr);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
