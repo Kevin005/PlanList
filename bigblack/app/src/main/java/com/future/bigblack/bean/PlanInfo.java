@@ -8,6 +8,7 @@ public class PlanInfo {
     private int id;
     private String content;
     private int is_doing;
+    /** 1:普通 2:重要 */
     private int level;
     private long date;
 
