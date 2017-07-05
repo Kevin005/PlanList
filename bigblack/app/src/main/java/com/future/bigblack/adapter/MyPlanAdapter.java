@@ -1,7 +1,6 @@
 package com.future.bigblack.adapter;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.TextView;
 
 import com.future.bigblack.R;
 import com.future.bigblack.bean.PlanInfo;
+import com.future.bigblack.database.PlanInfoDBHelper;
+import com.future.bigblack.untils.DateUntil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,16 @@ public class MyPlanAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void refreshData() {
+        if (data == null) {
+            data = new ArrayList<PlanInfo>();
+        } else {
+            data.clear();
+        }
+        data.addAll(PlanInfoDBHelper.getOneDayInfos(DateUntil.getCurrentYMD(), context));
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -78,28 +89,34 @@ public class MyPlanAdapter extends BaseAdapter {
         }
         holder.tv_content.setText(itemInfo.getContent());
         if (itemInfo.getIs_doing() == 1) {
+            holder.cBox_is_doing.setChecked(false);
             if (itemInfo.getLevel() == 2) {
                 TextPaint tp = holder.tv_content.getPaint();
                 tp.setFakeBoldText(true);
                 holder.tv_content.setTextColor(context.getResources().getColor(R.color.E56A47));
+            } else {
+                TextPaint tp = holder.tv_content.getPaint();
+                tp.setFakeBoldText(false);
+                holder.tv_content.setTextColor(context.getResources().getColor(R.color.black));
             }
         } else {
             TextPaint tp = holder.tv_content.getPaint();
-            tp.setAntiAlias(true);//抗锯齿
-            tp.setFlags(Paint.STRIKE_THRU_TEXT_FLAG);//中划线
-            holder.tv_content.setTextColor(context.getResources().getColor(R.color.gray));
-        }
-        if (itemInfo.getIs_doing() == 0) {
+            tp.setFakeBoldText(false);
+            holder.tv_content.setTextColor(context.getResources().getColor(R.color.darkgray));
             holder.cBox_is_doing.setChecked(true);
-        } else {
-            holder.cBox_is_doing.setChecked(false);
         }
-//        holder.cBox_is_doing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//
-//            }
-//        });
+        holder.cBox_is_doing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
+                    itemInfo.setIs_doing(0);
+                } else {
+                    itemInfo.setIs_doing(1);
+                }
+                PlanInfoDBHelper.updateInfo(itemInfo, context);
+                refreshData();
+            }
+        });
         return convertView;
     }
 

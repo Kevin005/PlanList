@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="今天"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -34,7 +34,8 @@
                 android:layout_gravity="end"
                 android:paddingRight="15dip"
                 android:text="结束打卡"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:visibility="gone" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
@@ -62,7 +63,7 @@
     <LinearLayout
         android:id="@+id/line_input_content"
         android:layout_width="match_parent"
-        android:layout_height="200dip"
+        android:layout_height="160dip"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:orientation="vertical">
@@ -75,7 +76,7 @@
             android:background="@null"
             android:gravity="left|top"
             android:padding="10dip"
-            android:text="fdsafdsa"
+            android:text=""
             android:textSize="15sp" />
 
         <LinearLayout
@@ -90,8 +91,8 @@
                 android:layout_marginLeft="20dip"
                 android:background="@color/gray" />
 
-            <RadioButton
-                android:id="@+id/rBtn_input_level"
+            <CheckBox
+                android:id="@+id/cBox_input_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"

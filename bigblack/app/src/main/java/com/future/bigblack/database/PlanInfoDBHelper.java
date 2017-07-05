@@ -55,12 +55,12 @@ public class PlanInfoDBHelper {
         return info;
     }
 
-    public static synchronized List<PlanInfo> getOneDayInfos(int id, Context paramContext) {
+    public static synchronized List<PlanInfo> getOneDayInfos(String currentDay, Context paramContext) {
         SQLiteDatabase sqlitedatabase = DBHelperUtil.getDatabase(paramContext);
         List<PlanInfo> infos = new ArrayList<PlanInfo>();
         if (sqlitedatabase != null) {
-            Cursor c = sqlitedatabase.rawQuery("SELECT * FROM " + TableName + " where dateDay = ?",
-                    new String[]{String.valueOf(id)});
+            Cursor c = sqlitedatabase.rawQuery("SELECT * FROM " + TableName + " where dateDay = ? order by is_doing DESC",
+                    new String[]{currentDay});
             while (c.moveToNext()) {
                 PlanInfo info = new PlanInfo();
                 info.setId(c.getInt(c.getColumnIndex("id")));

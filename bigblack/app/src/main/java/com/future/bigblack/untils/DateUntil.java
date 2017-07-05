@@ -11,6 +11,7 @@ import java.util.Date;
 
 public class DateUntil {
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 
     //获得当天0点时间
     public static int getTimesmorning() {
@@ -56,5 +57,13 @@ public class DateUntil {
         long lt = new Long(s);
         Date date = new Date(lt);
         return simpleDateFormat.format(date);
+    }
+
+    /**
+     * @return 2017-01-11
+     */
+    public static String getCurrentYMD() {
+        Date d = new Date();
+        return simpleDateFormat1.format(d);
     }
 }
