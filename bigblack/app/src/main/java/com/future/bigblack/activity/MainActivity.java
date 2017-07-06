@@ -2,10 +2,12 @@ package com.future.bigblack.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -26,6 +28,7 @@ import com.future.bigblack.adapter.MyPlanAdapter;
 import com.future.bigblack.bean.PlanInfo;
 import com.future.bigblack.database.PlanInfoDBHelper;
 import com.future.bigblack.untils.DateUntil;
+import com.future.bigblack.untils.PopOptionUtil;
 
 import java.util.List;
 
@@ -35,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox cBox_input_level;
     private ListView lv_content;
     private MyPlanAdapter adapter;
+    private PopOptionUtil mPop;
+    private FloatingActionButton fab;
+
+    private PlanInfo selectInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +61,18 @@ public class MainActivity extends AppCompatActivity {
         edt_input_content = (EditText) findViewById(R.id.edt_input_content);
         cBox_input_level = (CheckBox) findViewById(R.id.cBox_input_level);
         lv_content = (ListView) findViewById(R.id.lv_content);
-        adapter = new MyPlanAdapter(MainActivity.this);
+        initPopOption();
+        adapter = new MyPlanAdapter(MainActivity.this, new MyPlanAdapter.MyPlanAdapterCallback() {
+            @Override
+            public void tvContentLongClick(View selectView) {
+                if (mPop != null) mPop.show(selectView);
+            }
+
+            @Override
+            public void selectInfo(PlanInfo selectInfo) {
+                MainActivity.this.selectInfo = selectInfo;
+            }
+        });
         lv_content.setAdapter(adapter);
         lv_content.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -65,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,13 +106,56 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     showSoftInputFromWindow(MainActivity.this, edt_input_content);
+                    edt_input_content.setText("");
+                    cBox_input_level.setChecked(false);
                     line_input_content.setVisibility(View.VISIBLE);
                 }
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+
             }
         });
         getData(DateUntil.getCurrentYMD());
+    }
+
+    private void initPopOption() {
+        mPop = new PopOptionUtil(MainActivity.this);
+        mPop.setOnPopClickEvent(new PopOptionUtil.PopClickEvent() {
+            @Override
+            public void onCopy() {
+                ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                cmb.setText(edt_input_content.getText());
+                Snackbar.make(fab, "复制成功", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                mPop.dismiss();
+            }
+
+            @Override
+            public void onEdit() {
+                if (selectInfo != null) {
+                    edt_input_content.setText(selectInfo.getContent());
+                    if (selectInfo.getLevel() == 2) {
+                        cBox_input_level.setChecked(true);
+                    } else {
+                        cBox_input_level.setChecked(false);
+                    }
+                    showSoftInputFromWindow(MainActivity.this, edt_input_content);
+                    line_input_content.setVisibility(View.VISIBLE);
+                }
+                mPop.dismiss();
+            }
+
+            @Override
+            public void onDelete() {
+                if (selectInfo != null) {
+                    PlanInfoDBHelper.deleteInfoById(selectInfo.getId(), MainActivity.this);
+                    adapter.refreshData();
+                }
+                mPop.dismiss();
+            }
+
+            @Override
+            public void onSetTop() {
+                mPop.dismiss();
+            }
+        });
     }
 
     //弹出软件盘

@@ -8,13 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.future.bigblack.R;
 import com.future.bigblack.bean.PlanInfo;
 import com.future.bigblack.database.PlanInfoDBHelper;
 import com.future.bigblack.untils.DateUntil;
-import com.future.bigblack.untils.PopOptionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,32 +22,13 @@ public class MyPlanAdapter extends BaseAdapter {
     private List<PlanInfo> data;
     private LayoutInflater inflater;
     private Context context;
-    private PopOptionUtil mPop;
+    private MyPlanAdapterCallback callback;
 
-    public MyPlanAdapter(Context c) {
+    public MyPlanAdapter(Context c, MyPlanAdapterCallback callback) {
+        this.callback = callback;
         context = c;
         inflater = LayoutInflater.from(context);
         data = new ArrayList<PlanInfo>();
-        mPop = new PopOptionUtil(context);
-        mPop.setOnPopClickEvent(new PopOptionUtil.PopClickEvent() {
-            @Override
-            public void onEdit() {
-                Toast.makeText(context, "置顶", Toast.LENGTH_SHORT).show();
-                mPop.dismiss();
-            }
-
-            @Override
-            public void onDelete() {
-                Toast.makeText(context, "删除", Toast.LENGTH_SHORT).show();
-                mPop.dismiss();
-            }
-
-            @Override
-            public void onSetTop() {
-                Toast.makeText(context, "置顶", Toast.LENGTH_SHORT).show();
-                mPop.dismiss();
-            }
-        });
     }
 
     @Override
@@ -141,7 +120,10 @@ public class MyPlanAdapter extends BaseAdapter {
         holder.tv_content.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                mPop.show(v);
+                if (callback != null) {
+                    callback.selectInfo(itemInfo);
+                    callback.tvContentLongClick(v);
+                }
                 return true;
             }
         });
@@ -151,5 +133,11 @@ public class MyPlanAdapter extends BaseAdapter {
     public class ViewHolder {
         public CheckBox cBox_is_doing;
         public TextView tv_content;
+    }
+
+    public interface MyPlanAdapterCallback {
+        void tvContentLongClick(View selectView);
+
+        void selectInfo(PlanInfo selectInfo);
     }
 }

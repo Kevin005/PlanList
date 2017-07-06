@@ -21,6 +21,7 @@ public class PopOptionUtil {
     private int popupHeight;
     private PopupWindow popupWindow;
     private PopClickEvent mEvent;
+    private Button btnPopCopy;
     private Button btnPopEdit;
     private Button btnPopDel;
     private Button btnPopSetTop;
@@ -28,6 +29,7 @@ public class PopOptionUtil {
     public PopOptionUtil(Context context) {
         mContext = context;
         View popupView = LayoutInflater.from(mContext).inflate(R.layout.view_pop_option, null);
+        btnPopCopy = (Button) popupView.findViewById(R.id.btn_pop_copy);
         btnPopEdit = (Button) popupView.findViewById(R.id.btn_pop_edit);
         btnPopDel = (Button) popupView.findViewById(R.id.btn_pop_del);
         btnPopSetTop = (Button) popupView.findViewById(R.id.btn_pop_set_top);
@@ -52,6 +54,8 @@ public class PopOptionUtil {
     }
 
     public interface PopClickEvent {
+        void onCopy();
+
         void onEdit();
 
         void onDelete();
@@ -65,6 +69,12 @@ public class PopOptionUtil {
 
     private void initEvent() {
         if (mEvent != null) {
+            btnPopCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mEvent.onCopy();
+                }
+            });
             btnPopEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
