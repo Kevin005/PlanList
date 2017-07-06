@@ -58,7 +58,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimary"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <LinearLayout
         android:id="@+id/line_input_content"
