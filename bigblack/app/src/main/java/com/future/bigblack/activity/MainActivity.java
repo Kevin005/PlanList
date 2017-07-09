@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,13 +37,11 @@ import java.util.List;
 
 import static com.future.bigblack.untils.DateUntil.getCurrentYMD;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private final String TAG = MainActivity.class.getName();
     private LinearLayout line_input_content;
     private EditText edt_input_content;
     private CheckBox cBox_input_level;
-    //    private ListView lv_content;
-//    private MyPlanAdapter adapter;
     private PopOptionUtil mPop;
     private FloatingActionButton fab;
     private TextView tv_today;
@@ -71,29 +68,7 @@ public class MainActivity extends AppCompatActivity {
         line_input_content.setVisibility(View.GONE);
         edt_input_content = (EditText) findViewById(R.id.edt_input_content);
         cBox_input_level = (CheckBox) findViewById(R.id.cBox_input_level);
-//        lv_content = (ListView) findViewById(R.id.lv_content);
         initPopOption();
-//        adapter = new MyPlanAdapter(MainActivity.this, new MyPlanAdapter.MyPlanAdapterCallback() {
-//            @Override
-//            public void tvContentLongClick(View selectView) {
-//                if (mPop != null) mPop.show(selectView);
-//            }
-//
-//            @Override
-//            public void selectInfo(PlanInfo selectInfo) {
-//                MainActivity.this.selectInfo = selectInfo;
-//            }
-//        });
-//        lv_content.setAdapter(adapter);
-//        lv_content.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                line_input_content.setVisibility(View.GONE);
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(edt_input_content.getWindowToken(), 0);
-//                return false;
-//            }
-//        });
         selectDateStr = getCurrentYMD();
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         vPager_main.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.e(TAG, position + "====" + positionOffset + "===" + positionOffsetPixels);
+                Log.d(TAG, position + "====" + positionOffset + "===" + positionOffsetPixels);
                 selectAdapter = adapters.get(position);
                 selectDateStr = selectAdapter.getSelectDay();
                 if (selectDateStr.equals(getCurrentYMD())) {
@@ -137,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.e(TAG, position + "");
+                Log.d(TAG, position + "");
                 selectAdapter = adapters.get(position);
                 selectDateStr = selectAdapter.getSelectDay();
                 selectAdapter.refreshData();
@@ -145,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Log.e(TAG, state + "");
+                Log.d(TAG, state + "");
             }
         });
         vPager_main.setCurrentItem(currentWeekDays.size());
@@ -371,6 +346,11 @@ public class MainActivity extends AppCompatActivity {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 selectDateStr = year + "-" + String.format("%0" + 2 + "d", (month + 1)) + "-" + String.format("%0" + 2 + "d", dayOfMonth);
                 getData(selectDateStr);
+                if (selectDateStr.equals(getCurrentYMD())) {
+                    tv_today.setText(selectDateStr + "今天");
+                } else {
+                    tv_today.setText(selectDateStr);
+                }
             }
         });
     }
