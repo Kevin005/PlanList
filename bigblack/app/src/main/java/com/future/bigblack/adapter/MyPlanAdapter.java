@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.future.bigblack.R;
 import com.future.bigblack.bean.PlanInfo;
 import com.future.bigblack.database.PlanInfoDBHelper;
-import com.future.bigblack.untils.DateUntil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +23,18 @@ public class MyPlanAdapter extends BaseAdapter {
     private Context context;
     private MyPlanAdapterCallback callback;
 
-    public MyPlanAdapter(Context c, MyPlanAdapterCallback callback) {
+    private String selectDay;
+
+    public MyPlanAdapter(Context c, String selectDay, MyPlanAdapterCallback callback) {
         this.callback = callback;
+        this.selectDay = selectDay;
         context = c;
         inflater = LayoutInflater.from(context);
         data = new ArrayList<PlanInfo>();
+    }
+
+    public String getSelectDay() {
+        return selectDay;
     }
 
     @Override
@@ -70,7 +76,7 @@ public class MyPlanAdapter extends BaseAdapter {
         } else {
             data.clear();
         }
-        data.addAll(PlanInfoDBHelper.getOneDayInfos(DateUntil.getCurrentYMD(), context));
+        data.addAll(PlanInfoDBHelper.getOneDayInfos(selectDay, context));
         notifyDataSetChanged();
     }
 

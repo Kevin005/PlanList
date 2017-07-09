@@ -55,6 +55,23 @@ public class PlanInfoDBHelper {
         return info;
     }
 
+    public static synchronized List<String> getWeekDays(String monday, String sunday, Context paramContext) {
+        SQLiteDatabase sqlitedatabase = DBHelperUtil.getDatabase(paramContext);
+        List<String> currentWeekDays = new ArrayList<String>();
+        if (sqlitedatabase != null) {
+            Cursor c = sqlitedatabase.rawQuery("SELECT dateDay FROM " + TableName + " where dateDay BETWEEN ? and ? group by dateDay",
+                    new String[]{monday, sunday});
+            while (c.moveToNext()) {
+                currentWeekDays.add(c.getString(c.getColumnIndex("dateDay")));
+            }
+            if (c != null) {
+                c.close();
+            }
+        }
+        DBHelperUtil.closeDatabase();
+        return currentWeekDays;
+    }
+
     public static synchronized List<PlanInfo> getOneDayInfos(String currentDay, Context paramContext) {
         SQLiteDatabase sqlitedatabase = DBHelperUtil.getDatabase(paramContext);
         List<PlanInfo> infos = new ArrayList<PlanInfo>();
@@ -84,6 +101,17 @@ public class PlanInfoDBHelper {
         if (sqlitedatabase != null) {
             sqlitedatabase.execSQL("INSERT INTO " + TableName + " VALUES(null,?,?,?,?,?)", new Object[]{
                     info.getContent(), info.getIs_doing(), info.getLevel(), info.getDateStamp(), info.getDateDay()});
+        }
+        DBHelperUtil.closeDatabase();
+    }
+
+    public static synchronized void insertInfo(List<PlanInfo> infos, Context paramContext) {
+        SQLiteDatabase sqlitedatabase = DBHelperUtil.getDatabase(paramContext);
+        if (sqlitedatabase != null) {
+            for (PlanInfo info : infos) {
+                sqlitedatabase.execSQL("INSERT INTO " + TableName + " VALUES(null,?,?,?,?,?)", new Object[]{
+                        info.getContent(), info.getIs_doing(), info.getLevel(), info.getDateStamp(), info.getDateDay()});
+            }
         }
         DBHelperUtil.closeDatabase();
     }
