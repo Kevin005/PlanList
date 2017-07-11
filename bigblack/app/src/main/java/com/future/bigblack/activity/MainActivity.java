@@ -45,11 +45,14 @@ public class MainActivity extends BaseActivity {
     private PopOptionUtil mPop;
     private FloatingActionButton fab;
     private TextView tv_today;
+    private List<ListView> listViews;
+    private List<MyPlanAdapter> adapters;
 
     private PlanInfo selectInfo;
     private MyPlanAdapter selectAdapter;
     private List<String> currentWeekDays;//本周发计划天集合
     private String selectDateStr;
+    private boolean is_editing;//是否在编辑状态
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,7 @@ public class MainActivity extends BaseActivity {
                     cBox_input_level.setChecked(false);
                     line_input_content.setVisibility(View.VISIBLE);
                 }
+                is_editing = false;
             }
         });
         initCurrentWeekDays();
@@ -128,61 +132,33 @@ public class MainActivity extends BaseActivity {
 
     private void sendPlan() {
         String edtStr = edt_input_content.getText().toString();
-//        if (!TextUtils.isEmpty(edtStr)) {
-//            String[] contents = new String[]{};
-//            if (edtStr.contains("。。")) {
-//                int count = 0;
-//                for (int i = 0; i < edtStr.length(); i++) {
-//                    if (edtStr.charAt(i) == '。') {
-//                        count++;
-//                    }
-//                }
-//                if (count == 2) {
-//                    contents = edtStr.split("。。");
-//                }
-//            } else if (edtStr.contains("..")) {
-//                int count = 0;
-//                for (int i = 0; i < edtStr.length(); i++) {
-//                    if (edtStr.charAt(i) == '.') {
-//                        count++;
-//                    }
-//                }
-//                if (count == 2) {
-//                    contents = edtStr.split("..");
-//                }
-//            }
-//            if (contents.length > 0) {
-//                List<PlanInfo> infos = new ArrayList<>();
-//                for (int i = 0; i < contents.length; i++) {
-//                    PlanInfo info = new PlanInfo();
-//                    info.setContent(contents[i]);
-//                    info.setIs_doing(1);
-//                    info.setLevel(getLevel());
-//                    if (getCurrentYMD().equals(selectDateStr)) {
-//                        info.setDateDay(getCurrentYMD());
-//                    } else {
-//                        info.setDateDay(selectDateStr);
-//                    }
-//                    info.setDateStamp(System.currentTimeMillis());
-//                    infos.add(info);
-//                }
-//                PlanInfoDBHelper.insertInfo(infos, MainActivity.this);
-//            } else {
-                PlanInfo info = new PlanInfo();
-                info.setContent(edtStr);
-                info.setIs_doing(1);
-                info.setLevel(getLevel());
+        if (is_editing) {
+            if (selectInfo != null) {
+                selectInfo.setContent(edtStr);
+                selectInfo.setIs_doing(1);
+                selectInfo.setLevel(getLevel());
                 if (getCurrentYMD().equals(selectDateStr)) {
-                    info.setDateDay(getCurrentYMD());
+                    selectInfo.setDateDay(getCurrentYMD());
                 } else {
-                    info.setDateDay(selectDateStr);
+                    selectInfo.setDateDay(selectDateStr);
                 }
-                info.setDateStamp(System.currentTimeMillis());
-                PlanInfoDBHelper.insertInfo(info, MainActivity.this);
-//            }
-//        }
+                selectInfo.setDateStamp(System.currentTimeMillis());
+            }
+            PlanInfoDBHelper.updateInfo(selectInfo, MainActivity.this);
+        } else {
+            PlanInfo info = new PlanInfo();
+            info.setContent(edtStr);
+            info.setIs_doing(1);
+            info.setLevel(getLevel());
+            if (getCurrentYMD().equals(selectDateStr)) {
+                info.setDateDay(getCurrentYMD());
+            } else {
+                info.setDateDay(selectDateStr);
+            }
+            info.setDateStamp(System.currentTimeMillis());
+            PlanInfoDBHelper.insertInfo(info, MainActivity.this);
+        }
     }
-
 
     private void initCurrentWeekDays() {
         currentWeekDays = PlanInfoDBHelper.getWeekDays(DateUntil.getMondayOfThisWeek(), DateUntil.getSundayOfThisWeek(), MainActivity.this);
@@ -197,9 +173,6 @@ public class MainActivity extends BaseActivity {
             currentWeekDays.add(todayStr);//加入一条初始空白数据
         }
     }
-
-    private List<ListView> listViews;
-    private List<MyPlanAdapter> adapters;
 
     private void initListView() {
         listViews = new ArrayList<ListView>();
@@ -221,6 +194,7 @@ public class MainActivity extends BaseActivity {
             listView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    is_editing = false;
                     line_input_content.setVisibility(View.GONE);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(edt_input_content.getWindowToken(), 0);
@@ -235,7 +209,6 @@ public class MainActivity extends BaseActivity {
     }
 
     public class PagerViewAdapter extends PagerAdapter {
-
 
         public PagerViewAdapter() {
         }
@@ -267,9 +240,11 @@ public class MainActivity extends BaseActivity {
         mPop.setOnPopClickEvent(new PopOptionUtil.PopClickEvent() {
             @Override
             public void onCopy() {
-                ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                cmb.setText(edt_input_content.getText());
-                Snackbar.make(fab, "复制成功", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                if (selectInfo != null) {
+                    ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    cmb.setText(selectInfo.getContent());
+                    Snackbar.make(fab, "复制成功", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+                }
                 mPop.dismiss();
             }
 
@@ -284,6 +259,7 @@ public class MainActivity extends BaseActivity {
                     }
                     showSoftInputFromWindow(MainActivity.this, edt_input_content);
                     line_input_content.setVisibility(View.VISIBLE);
+                    is_editing = true;
                 }
                 mPop.dismiss();
             }
