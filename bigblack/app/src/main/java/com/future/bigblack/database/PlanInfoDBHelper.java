@@ -20,7 +20,7 @@ public class PlanInfoDBHelper {
         if (paramSQLiteDatabase != null)
             paramSQLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + TableName
                     + "(id INTEGER PRIMARY KEY AUTOINCREMENT, " + " content VARCHAR, "
-                    + "is_doing INTEGER, " + "level INTEGER, " + "dateStamp LONG, " + "dateDay VARCHAR)");
+                    + "is_doing INTEGER, " + "level INTEGER, " + "dateStamp LONG, " + "dateDay VARCHAR, " + "type INTEGER)");
     }
 
     public static synchronized void delAll(Context paramContext) {
@@ -144,9 +144,10 @@ public class PlanInfoDBHelper {
 
     public static void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 1) {
-//            db.execSQL("drop table if exists " + TableName);
+            db.execSQL("drop table if exists " + TableName);
             create(db);
-        } else if (oldVersion < 3) {
+        }
+        if (oldVersion < 2) {
             db.execSQL("ALTER TABLE " + TableName + " ADD type INTEGER");
         }
     }
