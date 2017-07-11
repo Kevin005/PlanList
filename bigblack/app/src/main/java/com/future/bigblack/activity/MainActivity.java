@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,8 +22,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.future.bigblack.R;
@@ -46,8 +49,11 @@ public class MainActivity extends BaseActivity {
     private PopOptionUtil mPop;
     private FloatingActionButton fab;
     private TextView tv_today;
+    private ImageView img_right;
     private List<ListView> listViews;
     private List<MyPlanAdapter> adapters;
+    private PopupWindow mPopupwindow = null;
+    private View llyPopView;
 
     private PlanInfo selectInfo;
     private MyPlanAdapter selectAdapter;
@@ -61,6 +67,21 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        llyPopView = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_popup, null);
+        img_right = (ImageView) findViewById(R.id.img_right);
+        img_right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPopupwindow == null) {//如果mPopupwindow为空
+                    //实例化一个PopupWindow（加载的布局，视图的宽度，视图的高度，是否可见）
+                    mPopupwindow = new PopupWindow(llyPopView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                    //设置PopupWindow的背景颜色
+                    mPopupwindow.setBackgroundDrawable(new ColorDrawable(0xffffffff));
+                }
+                //设置PopupWindow的位置（挂载的控件，X轴的偏移量，Y轴的偏移量）
+                mPopupwindow.showAsDropDown(img_right, 0, 20);
+            }
+        });
         tv_today = (TextView) findViewById(R.id.tv_today);
         tv_today.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -348,6 +369,4 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
-
 }

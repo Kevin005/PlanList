@@ -29,14 +29,14 @@
                 android:textColor="@color/white"
                 android:textSize="17sp" />
 
-            <TextView
+            <ImageView
+                android:id="@+id/img_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:paddingRight="15dip"
-                android:text="结束打卡"
-                android:textSize="15sp"
-                android:visibility="gone" />
+                android:layout_gravity="right"
+                android:layout_marginRight="10dip"
+                android:background="@android:drawable/ic_menu_more"
+                android:scaleType="center" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
