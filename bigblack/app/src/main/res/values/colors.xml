@@ -3,6 +3,7 @@
     <color name="colorPrimary">#3CB371</color>//#3F51B5
     <color name="colorPrimaryDark">#2E8B57</color>//#303F9F
     <color name="colorAccent">#FF4081</color>
+    <color name="background">#FAFAFA</color>
 
     <color name="white">#FFFFFF</color><!--白色 -->
     <color name="ivory">#FFFFF0</color><!--象牙色 -->

@@ -52,6 +52,16 @@ public class MyPlanAdapter extends BaseAdapter {
         return position;
     }
 
+    public void remove(PlanInfo info) {//删除指定位置的item
+        data.remove(info);
+        this.notifyDataSetChanged();//不要忘记更改适配器对象的数据源
+    }
+
+    public void insert(PlanInfo item, int arg0) {//在指定位置插入item
+        data.add(arg0, item);
+        this.notifyDataSetChanged();
+    }
+
     public void setData(List<PlanInfo> infos) {
         if (data == null) {
             data = new ArrayList<PlanInfo>();
@@ -89,6 +99,7 @@ public class MyPlanAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_plan_content, null);
             holder.cBox_is_doing = (CheckBox) convertView.findViewById(R.id.cBox_is_doing);
             holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
+            holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -110,6 +121,11 @@ public class MyPlanAdapter extends BaseAdapter {
             tp.setFakeBoldText(false);
             holder.tv_content.setTextColor(context.getResources().getColor(R.color.darkgray));
             holder.cBox_is_doing.setChecked(true);
+        }
+        if (itemInfo.getType() == 0) {
+            holder.tv_type.setVisibility(View.GONE);
+        } else if (itemInfo.getType() == 1) {
+            holder.tv_type.setVisibility(View.VISIBLE);
         }
         holder.cBox_is_doing.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +155,7 @@ public class MyPlanAdapter extends BaseAdapter {
     public class ViewHolder {
         public CheckBox cBox_is_doing;
         public TextView tv_content;
+        public TextView tv_type;
     }
 
     public interface MyPlanAdapterCallback {

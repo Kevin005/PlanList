@@ -15,6 +15,16 @@ public class PlanInfo {
     private long dateStamp;
     /** 2017-01-01 */
     private String dateDay;
+    /** 类型:0:正常不显示,1:工作 */
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public long getDateStamp() {
         return dateStamp;

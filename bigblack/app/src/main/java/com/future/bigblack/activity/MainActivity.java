@@ -42,6 +42,7 @@ public class MainActivity extends BaseActivity {
     private LinearLayout line_input_content;
     private EditText edt_input_content;
     private CheckBox cBox_input_level;
+    private CheckBox cBox_type;
     private PopOptionUtil mPop;
     private FloatingActionButton fab;
     private TextView tv_today;
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity {
         line_input_content.setVisibility(View.GONE);
         edt_input_content = (EditText) findViewById(R.id.edt_input_content);
         cBox_input_level = (CheckBox) findViewById(R.id.cBox_input_level);
+        cBox_type = (CheckBox) findViewById(R.id.cBox_type);
         initPopOption();
         selectDateStr = getCurrentYMD();
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -85,12 +87,14 @@ public class MainActivity extends BaseActivity {
                         line_input_content.setVisibility(View.GONE);
                         edt_input_content.setText("");
                         cBox_input_level.setChecked(false);
+                        cBox_type.setChecked(false);
                         selectAdapter.refreshData();
                     }
                 } else {
                     showSoftInputFromWindow(MainActivity.this, edt_input_content);
                     edt_input_content.setText("");
                     cBox_input_level.setChecked(false);
+                    cBox_type.setChecked(false);
                     line_input_content.setVisibility(View.VISIBLE);
                 }
                 is_editing = false;
@@ -137,6 +141,7 @@ public class MainActivity extends BaseActivity {
                 selectInfo.setContent(edtStr);
                 selectInfo.setIs_doing(1);
                 selectInfo.setLevel(getLevel());
+                selectInfo.setType(getType());
                 if (getCurrentYMD().equals(selectDateStr)) {
                     selectInfo.setDateDay(getCurrentYMD());
                 } else {
@@ -150,6 +155,7 @@ public class MainActivity extends BaseActivity {
             info.setContent(edtStr);
             info.setIs_doing(1);
             info.setLevel(getLevel());
+            info.setType(getType());
             if (getCurrentYMD().equals(selectDateStr)) {
                 info.setDateDay(getCurrentYMD());
             } else {
@@ -257,6 +263,11 @@ public class MainActivity extends BaseActivity {
                     } else {
                         cBox_input_level.setChecked(false);
                     }
+                    if (selectInfo.getType() == 1) {
+                        cBox_type.setChecked(true);
+                    } else {
+                        cBox_type.setChecked(false);
+                    }
                     showSoftInputFromWindow(MainActivity.this, edt_input_content);
                     line_input_content.setVisibility(View.VISIBLE);
                     is_editing = true;
@@ -296,6 +307,13 @@ public class MainActivity extends BaseActivity {
             return 2;
         }
         return 1;
+    }
+
+    private int getType() {
+        if (cBox_type.isChecked()) {
+            return 1;
+        }
+        return 0;
     }
 
     private void getData(String dayDate) {

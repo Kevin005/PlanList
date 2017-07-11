@@ -43,6 +43,7 @@ public class PlanInfoDBHelper {
                 info.setContent(c.getString(c.getColumnIndex("content")));
                 info.setIs_doing(c.getInt(c.getColumnIndex("is_doing")));
                 info.setLevel(c.getInt(c.getColumnIndex("level")));
+                info.setType(c.getInt(c.getColumnIndex("type")));
                 info.setDateStamp(c.getLong(c.getColumnIndex("dateStamp")));
                 info.setDateDay(c.getString(c.getColumnIndex("dateDay")));
                 break;
@@ -84,6 +85,7 @@ public class PlanInfoDBHelper {
                 info.setContent(c.getString(c.getColumnIndex("content")));
                 info.setIs_doing(c.getInt(c.getColumnIndex("is_doing")));
                 info.setLevel(c.getInt(c.getColumnIndex("level")));
+                info.setType(c.getInt(c.getColumnIndex("type")));
                 info.setDateStamp(c.getLong(c.getColumnIndex("dateStamp")));
                 info.setDateDay(c.getString(c.getColumnIndex("dateDay")));
                 infos.add(info);
@@ -99,8 +101,8 @@ public class PlanInfoDBHelper {
     public static synchronized void insertInfo(PlanInfo info, Context paramContext) {
         SQLiteDatabase sqlitedatabase = DBHelperUtil.getDatabase(paramContext);
         if (sqlitedatabase != null) {
-            sqlitedatabase.execSQL("INSERT INTO " + TableName + " VALUES(null,?,?,?,?,?)", new Object[]{
-                    info.getContent(), info.getIs_doing(), info.getLevel(), info.getDateStamp(), info.getDateDay()});
+            sqlitedatabase.execSQL("INSERT INTO " + TableName + " VALUES(null,?,?,?,?,?,?)", new Object[]{
+                    info.getContent(), info.getIs_doing(), info.getLevel(), info.getDateStamp(), info.getDateDay(), info.getType()});
         }
         DBHelperUtil.closeDatabase();
     }
@@ -109,8 +111,8 @@ public class PlanInfoDBHelper {
         SQLiteDatabase sqlitedatabase = DBHelperUtil.getDatabase(paramContext);
         if (sqlitedatabase != null) {
             for (PlanInfo info : infos) {
-                sqlitedatabase.execSQL("INSERT INTO " + TableName + " VALUES(null,?,?,?,?,?)", new Object[]{
-                        info.getContent(), info.getIs_doing(), info.getLevel(), info.getDateStamp(), info.getDateDay()});
+                sqlitedatabase.execSQL("INSERT INTO " + TableName + " VALUES(null,?,?,?,?,?,?)", new Object[]{
+                        info.getContent(), info.getIs_doing(), info.getLevel(), info.getDateStamp(), info.getDateDay(), info.getType()});
             }
         }
         DBHelperUtil.closeDatabase();
@@ -132,6 +134,7 @@ public class PlanInfoDBHelper {
             cv.put("content", info.getContent());
             cv.put("is_doing", info.getIs_doing());
             cv.put("level", info.getLevel());
+            cv.put("type", info.getType());
             cv.put("dateStamp", info.getDateStamp());
             cv.put("dateDay", info.getDateDay());
             sqlitedatabase.update(TableName, cv, "id=? ", new String[]{String.valueOf(info.getId())});
@@ -140,9 +143,11 @@ public class PlanInfoDBHelper {
     }
 
     public static void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            db.execSQL("drop table if exists " + TableName);
+        if (oldVersion < 1) {
+//            db.execSQL("drop table if exists " + TableName);
             create(db);
+        } else if (oldVersion < 3) {
+            db.execSQL("ALTER TABLE " + TableName + " ADD type INTEGER");
         }
     }
 }

@@ -1,3 +1,54 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- title 相关 -->
+    <dimen name="title_height">55.0dp</dimen>
+    <dimen name="titlebtn_compounddrawable_padding">5.0dp</dimen>
+    <dimen name="titlebtn_padding">10.0dp</dimen>
+    <dimen name="titlebtn_left_padding">15.0dp</dimen>
+
+    <!-- 字体大小 -->
+    <dimen name="text_size_xxhuge">50.0sp</dimen>
+    <dimen name="text_size_xhuge">36.0sp</dimen>
+    <dimen name="text_size_huge">30.0sp</dimen>
+    <dimen name="text_size_xxlarge">24.0sp</dimen>
+    <dimen name="text_size_xlarge">22.0sp</dimen>
+    <dimen name="text_size_large">20.0sp</dimen>
+    <dimen name="text_size_medium">18.0sp</dimen>
+    <dimen name="text_size_xmedium">17.0sp</dimen>
+    <dimen name="text_size_small">16.0sp</dimen>
+    <dimen name="text_size_small_15">15.0sp</dimen>
+    <dimen name="text_size_xsmall">14.0sp</dimen>
+    <dimen name="text_size_xxsmall">12.0sp</dimen>
+    <dimen name="text_size_xxxsmall">11.0sp</dimen>
+    <dimen name="text_size_tiny">10.0sp</dimen>
+
+    <!-- 个人页面 -->
+    <dimen name="item_my_minheight">50dp</dimen>
+    <dimen name="item_my_padding">5dp</dimen>
+    <dimen name="item_icon_margin">5dp</dimen>
+    <dimen name="item_right_arrow_margin">10dp</dimen>
+
+    <!-- 公用部件 -->
+    <dimen name="dividing_line_height">1.0px</dimen>
+    <dimen name="dividing_blank_height">10.0dp</dimen>
+
+    <!-- 聊天界面 -->
+    <dimen name="margin_chat_activity">5dp</dimen>
+    <dimen name="size_avatar">50dp</dimen>
+    <dimen name="list_item_padding">15dip</dimen>
+    <dimen name="list_item_left_padding">15dip</dimen>
+    <dimen name="list_item_right_padding">15dip</dimen>
+    <!-- 日程首页 -->
+    <dimen name="leftlist_img_width">80.0dip</dimen>
+
+    <!-- 无内容时的背景 上下边距 -->
+    <dimen name="no_content_up_nomargin">94.3dip</dimen>
+    <dimen name="no_content_down_nomargin">43.3dip</dimen>
+    <!-- 沉浸状态栏高度 -->
+    <dimen name="status_bar_height">0dp</dimen>
 </resources>

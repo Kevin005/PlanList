@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="TouchListView">
+        <attr name="normal_height" format="dimension" />
+        <attr name="expanded_height" format="dimension" />
+        <attr name="grabber" format="integer" />
+        <attr name="dragndrop_background" format="color" />
+        <attr name="remove_mode" format="dimension|reference" />
+    </declare-styleable>
+</resources>
