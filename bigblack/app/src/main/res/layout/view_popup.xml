@@ -5,13 +5,13 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_pop_content"
+        android:id="@+id/tv_pop_week"
         android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center"
-        android:paddingBottom="8dip"
-        android:paddingTop="8dip"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip"
         android:text="周计划" />
 
     <View
@@ -20,12 +20,27 @@
         android:background="@color/lightgray" />
 
     <TextView
-        android:id="@+id/tv_pop_content1"
+        android:id="@+id/tv_pop_month"
         android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center"
-        android:paddingBottom="8dip"
-        android:paddingTop="8dip"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip"
         android:text="月计划" />
+
+    <View
+        android:layout_width="100dip"
+        android:layout_height="1dip"
+        android:background="@color/lightgray" />
+
+    <TextView
+        android:id="@+id/tv_pop_search"
+        android:layout_width="100dip"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingBottom="10dip"
+        android:paddingTop="10dip"
+        android:text="搜索" />
 </LinearLayout>

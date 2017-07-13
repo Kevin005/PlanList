@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -72,14 +73,7 @@ public class MainActivity extends BaseActivity {
         img_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPopupwindow == null) {//如果mPopupwindow为空
-                    //实例化一个PopupWindow（加载的布局，视图的宽度，视图的高度，是否可见）
-                    mPopupwindow = new PopupWindow(llyPopView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-                    //设置PopupWindow的背景颜色
-                    mPopupwindow.setBackgroundDrawable(new ColorDrawable(0xffffffff));
-                }
-                //设置PopupWindow的位置（挂载的控件，X轴的偏移量，Y轴的偏移量）
-                mPopupwindow.showAsDropDown(img_right, 0, 20);
+                setPop();
             }
         });
         tv_today = (TextView) findViewById(R.id.tv_today);
@@ -153,6 +147,42 @@ public class MainActivity extends BaseActivity {
             }
         });
         vPager_main.setCurrentItem(currentWeekDays.size());
+    }
+
+    private void setPop() {
+        if (mPopupwindow == null) {
+            //实例化一个PopupWindow（加载的布局，视图的宽度，视图的高度，是否可见）
+            mPopupwindow = new PopupWindow(llyPopView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            //设置PopupWindow的背景颜色
+            mPopupwindow.setBackgroundDrawable(new ColorDrawable(0xffffffff));
+            TextView tvPopWeek = (TextView) llyPopView.findViewById(R.id.tv_pop_week);
+            tvPopWeek.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, WeekPlanActivity.class));
+                    mPopupwindow.dismiss();
+                }
+            });
+            TextView tvPopMonth = (TextView) llyPopView.findViewById(R.id.tv_pop_month);
+            tvPopMonth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, MonthPlanActivity.class));
+                    mPopupwindow.dismiss();
+                }
+            });
+            TextView tvPopSearch = (TextView) llyPopView.findViewById(R.id.tv_pop_search);
+            tvPopSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, SearchPlanActivity.class));
+                    mPopupwindow.dismiss();
+                }
+            });
+        }
+        //设置PopupWindow的位置（挂载的控件，X轴的偏移量，Y轴的偏移量）
+        mPopupwindow.showAsDropDown(img_right, 0, 20);
+
     }
 
     private void sendPlan() {
@@ -368,5 +398,10 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected boolean setGesturesTracker() {
+        return false;
     }
 }

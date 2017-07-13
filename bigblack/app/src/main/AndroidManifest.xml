@@ -19,6 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.WeekPlanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MonthPlanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchPlanActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
