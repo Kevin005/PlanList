@@ -8,9 +8,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.future.bigblack.activity.WeekPlanActivity">
-<DatePicker
-    android:id="@+id/datePick_wek"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"></DatePicker>
+    tools:context="com.future.bigblack.activity.BigPlanActivity">
+
+    <DatePicker
+        android:id="@+id/datePick_wek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></DatePicker>
 </RelativeLayout>

@@ -1,12 +1,10 @@
 package com.future.bigblack.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,10 +24,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.future.bigblack.R;
+import com.future.bigblack.activity.Server.MainActivityInterface;
+import com.future.bigblack.activity.presenter.MainActivityPresenter;
 import com.future.bigblack.adapter.MyPlanAdapter;
 import com.future.bigblack.bean.PlanInfo;
 import com.future.bigblack.database.PlanInfoDBHelper;
@@ -43,18 +42,17 @@ import static com.future.bigblack.untils.DateUntil.getCurrentYMD;
 
 public class MainActivity extends BaseActivity {
     private final String TAG = MainActivity.class.getName();
-    private LinearLayout line_input_content;
+    private MainActivityPresenter presenter;
+    private LinearLayout lineInputContent;
     private EditText edt_input_content;
     private CheckBox cBox_input_level;
     private CheckBox cBox_type;
     private PopOptionUtil mPop;
     private FloatingActionButton fab;
-    private TextView tv_today;
-    private ImageView img_right;
+    private TextView tvToday;
+    private ImageView imgRight;
     private List<ListView> listViews;
     private List<MyPlanAdapter> adapters;
-    private PopupWindow mPopupwindow = null;
-    private View llyPopView;
 
     private PlanInfo selectInfo;
     private MyPlanAdapter selectAdapter;
@@ -68,49 +66,58 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        llyPopView = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_popup, null);
-        img_right = (ImageView) findViewById(R.id.img_right);
-        img_right.setOnClickListener(new View.OnClickListener() {
+        presenter = new MainActivityPresenter(MainActivity.this);
+        imgRight = (ImageView) findViewById(R.id.img_right);
+        imgRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setPop();
+                presenter.showRightPop(imgRight, new MainActivityInterface.OnRightPopListener() {
+                    @Override
+                    public void onBigPlan() {
+                        startActivity(new Intent(MainActivity.this, BigPlanActivity.class));
+                    }
+
+                    @Override
+                    public void onSearch() {
+                        startActivity(new Intent(MainActivity.this, SearchPlanActivity.class));
+                    }
+                });
             }
         });
-        tv_today = (TextView) findViewById(R.id.tv_today);
-        tv_today.setOnClickListener(new View.OnClickListener() {
+        tvToday = (TextView) findViewById(R.id.tv_today);
+        tvToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popDialog();
+                popCalendarDialog();
             }
         });
-        line_input_content = (LinearLayout) findViewById(R.id.line_input_content);
-        line_input_content.setVisibility(View.GONE);
+        lineInputContent = (LinearLayout) findViewById(R.id.line_input_content);
         edt_input_content = (EditText) findViewById(R.id.edt_input_content);
         cBox_input_level = (CheckBox) findViewById(R.id.cBox_input_level);
         cBox_type = (CheckBox) findViewById(R.id.cBox_type);
-        initPopOption();
+        initPopEditOption();
         selectDateStr = getCurrentYMD();
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (line_input_content.getVisibility() == View.VISIBLE) {
+                if (lineInputContent.getVisibility() == View.VISIBLE) {
                     if (!TextUtils.isEmpty(edt_input_content.getText().toString())) {
                         sendPlan();
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(edt_input_content.getWindowToken(), 0);
-                        line_input_content.setVisibility(View.GONE);
+                        lineInputContent.setVisibility(View.GONE);
                         edt_input_content.setText("");
                         cBox_input_level.setChecked(false);
                         cBox_type.setChecked(false);
                         selectAdapter.refreshData();
                     }
                 } else {
-                    showSoftInputFromWindow(MainActivity.this, edt_input_content);
+                    showSoftInputFromWindow(edt_input_content);
                     edt_input_content.setText("");
                     cBox_input_level.setChecked(false);
                     cBox_type.setChecked(false);
-                    line_input_content.setVisibility(View.VISIBLE);
+                    lineInputContent.setVisibility(View.VISIBLE);
                 }
                 is_editing = false;
             }
@@ -127,9 +134,9 @@ public class MainActivity extends BaseActivity {
                 selectAdapter = adapters.get(position);
                 selectDateStr = selectAdapter.getSelectDay();
                 if (selectDateStr.equals(getCurrentYMD())) {
-                    tv_today.setText(selectDateStr + "今天");
+                    tvToday.setText(selectDateStr + "今天");
                 } else {
-                    tv_today.setText(selectDateStr);
+                    tvToday.setText(selectDateStr);
                 }
             }
 
@@ -149,41 +156,6 @@ public class MainActivity extends BaseActivity {
         vPager_main.setCurrentItem(currentWeekDays.size());
     }
 
-    private void setPop() {
-        if (mPopupwindow == null) {
-            //实例化一个PopupWindow（加载的布局，视图的宽度，视图的高度，是否可见）
-            mPopupwindow = new PopupWindow(llyPopView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-            //设置PopupWindow的背景颜色
-            mPopupwindow.setBackgroundDrawable(new ColorDrawable(0xffffffff));
-            TextView tvPopWeek = (TextView) llyPopView.findViewById(R.id.tv_pop_week);
-            tvPopWeek.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, WeekPlanActivity.class));
-                    mPopupwindow.dismiss();
-                }
-            });
-            TextView tvPopMonth = (TextView) llyPopView.findViewById(R.id.tv_pop_month);
-            tvPopMonth.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, MonthPlanActivity.class));
-                    mPopupwindow.dismiss();
-                }
-            });
-            TextView tvPopSearch = (TextView) llyPopView.findViewById(R.id.tv_pop_search);
-            tvPopSearch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(MainActivity.this, SearchPlanActivity.class));
-                    mPopupwindow.dismiss();
-                }
-            });
-        }
-        //设置PopupWindow的位置（挂载的控件，X轴的偏移量，Y轴的偏移量）
-        mPopupwindow.showAsDropDown(img_right, 0, 20);
-
-    }
 
     private void sendPlan() {
         String edtStr = edt_input_content.getText().toString();
@@ -252,7 +224,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     is_editing = false;
-                    line_input_content.setVisibility(View.GONE);
+                    lineInputContent.setVisibility(View.GONE);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(edt_input_content.getWindowToken(), 0);
                     return false;
@@ -292,7 +264,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void initPopOption() {
+    private void initPopEditOption() {
         mPop = new PopOptionUtil(MainActivity.this);
         mPop.setOnPopClickEvent(new PopOptionUtil.PopClickEvent() {
             @Override
@@ -319,9 +291,9 @@ public class MainActivity extends BaseActivity {
                     } else {
                         cBox_type.setChecked(false);
                     }
-                    showSoftInputFromWindow(MainActivity.this, edt_input_content);
-                    line_input_content.setVisibility(View.VISIBLE);
+                    lineInputContent.setVisibility(View.VISIBLE);
                     is_editing = true;
+                    showSoftInputFromWindow(edt_input_content);
                 }
                 mPop.dismiss();
             }
@@ -345,7 +317,7 @@ public class MainActivity extends BaseActivity {
     }
 
     //弹出软件盘
-    public static void showSoftInputFromWindow(Activity activity, EditText editText) {
+    public static void showSoftInputFromWindow(EditText editText) {
         editText.setFocusable(true);
         editText.setFocusableInTouchMode(true);
         editText.requestFocus();
@@ -367,20 +339,15 @@ public class MainActivity extends BaseActivity {
         return 0;
     }
 
-    private void getData(String dayDate) {
-        List<PlanInfo> infos = PlanInfoDBHelper.getOneDayInfos(dayDate, MainActivity.this);
-        selectAdapter.setData(infos);
-    }
-
-    private void popDialog() {
+    private void popCalendarDialog() {
         View view_dialog = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_calendar, null);
         CalendarView cal_view = (CalendarView) view_dialog.findViewById(R.id.cal_view);
         LinearLayout line_cal = (LinearLayout) view_dialog.findViewById(R.id.line_cal);
-        final Dialog build2 = new Dialog(MainActivity.this, R.style.dialog);
-        build2.setContentView(view_dialog);
-        build2.setCanceledOnTouchOutside(true);
-        build2.show();
-        build2.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        final Dialog build = new Dialog(MainActivity.this, R.style.dialog);
+        build.setContentView(view_dialog);
+        build.setCanceledOnTouchOutside(true);
+        build.show();
+        build.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
             }
@@ -390,11 +357,12 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 selectDateStr = year + "-" + String.format("%0" + 2 + "d", (month + 1)) + "-" + String.format("%0" + 2 + "d", dayOfMonth);
-                getData(selectDateStr);
+                List<PlanInfo> infos = PlanInfoDBHelper.getOneDayInfos(selectDateStr, MainActivity.this);
+                selectAdapter.setData(infos);
                 if (selectDateStr.equals(getCurrentYMD())) {
-                    tv_today.setText(selectDateStr + "今天");
+                    tvToday.setText(selectDateStr + "今天");
                 } else {
-                    tv_today.setText(selectDateStr);
+                    tvToday.setText(selectDateStr);
                 }
             }
         });

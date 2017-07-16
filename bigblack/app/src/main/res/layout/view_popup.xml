@@ -5,29 +5,14 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_pop_week"
+        android:id="@+id/tv_pop_big_plan"
         android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center"
         android:paddingBottom="10dip"
         android:paddingTop="10dip"
-        android:text="周计划" />
-
-    <View
-        android:layout_width="100dip"
-        android:layout_height="1dip"
-        android:background="@color/lightgray" />
-
-    <TextView
-        android:id="@+id/tv_pop_month"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center"
-        android:paddingBottom="10dip"
-        android:paddingTop="10dip"
-        android:text="月计划" />
+        android:text="大计划" />
 
     <View
         android:layout_width="100dip"

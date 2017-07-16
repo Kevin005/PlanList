@@ -62,7 +62,8 @@
         android:layout_height="160dip"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/edt_input_content"

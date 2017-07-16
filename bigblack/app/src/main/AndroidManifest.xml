@@ -20,14 +20,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.WeekPlanActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.MonthPlanActivity"
+            android:name=".activity.BigPlanActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SearchPlanActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
