@@ -321,8 +321,11 @@ public class MainActivity extends BaseActivity {
         editText.setFocusable(true);
         editText.setFocusableInTouchMode(true);
         editText.requestFocus();
-        InputMethodManager inputManager = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.showSoftInput(editText, 0);
+//        InputMethodManager inputManager = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        inputManager.showSoftInput(editText, 0);
+
+        InputMethodManager imm = ( InputMethodManager ) editText.getContext( ).getSystemService( Context.INPUT_METHOD_SERVICE );
+        imm.showSoftInput(editText,InputMethodManager.SHOW_FORCED);
     }
 
     private int getLevel() {
@@ -370,6 +373,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected boolean setGesturesTracker() {
-        return false;
+        return true;
     }
 }
