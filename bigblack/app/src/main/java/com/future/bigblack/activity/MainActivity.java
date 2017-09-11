@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
@@ -35,6 +36,7 @@ import com.future.bigblack.database.PlanInfoDBHelper;
 import com.future.bigblack.untils.DateUntil;
 import com.future.bigblack.untils.PopOptionUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,8 +156,30 @@ public class MainActivity extends BaseActivity {
             }
         });
         vPager_main.setCurrentItem(currentWeekDays.size());
+
+        //TODO 试试这个菜单
+//        <android.support.v7.widget.ActionBarContextView
+//        android:layout_width="match_parent"
+//        android:layout_height="wrap_content"
+//        android:visibility="visible"/>
+//        getOverflowMenu();
     }
 
+    private void getOverflowMenu() {
+        // 强制actionbar显示overflow菜单
+        // force to show overflow menu in actionbar for android 4.4 below
+        try {
+            ViewConfiguration config = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class
+                    .getDeclaredField("sHasPermanentMenuKey");
+            if (menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void sendPlan() {
         String edtStr = edt_input_content.getText().toString();
