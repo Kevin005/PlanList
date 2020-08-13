@@ -1,6 +1,7 @@
 ﻿# PlanList
-实现一个极其方便、简洁、智能、规划未来的PlanList
+这是一个**Android**应用程序，有着极方便、简洁、智能的清单功能。
 
+```
 private void popDialog() {
         View view_dialog = LayoutInflater.from(MainActivity.this).inflate(R.layout.view_calendar, null);
         CalendarView cal_view = (CalendarView) view_dialog.findViewById(R.id.cal_view);
@@ -47,3 +48,4 @@ private void popDialog() {
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.3</item>
     </style>
+```
